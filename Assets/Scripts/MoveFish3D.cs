@@ -20,11 +20,13 @@ public class MoveFish3D : MonoBehaviour
     private GameObject slider;
     private GameObject bucket;
     private GameObject catchanim;
-    
+    public CollectionCount collectionCount;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collectionCount = FindObjectOfType<CollectionCount>();
 
         //spawn with random velocity direction
         int speedMod = Random.Range(0, 2);
@@ -33,6 +35,7 @@ public class MoveFish3D : MonoBehaviour
             speedZ *= -1;
         }
         rb.velocity = new Vector3(0f, 0f, speedZ);
+        
 
         bob = GameObject.Find("Bob");
         score = GameObject.Find("Score");
@@ -75,7 +78,17 @@ public class MoveFish3D : MonoBehaviour
     {
         //reverse direction if hit wall
         speedZ = speedZ * -1.0f;
-        rb.velocity = new Vector3(0f, 0f, speedZ);
+
+        float rotTest = Random.Range(60.0f, 120.0f);
+        //Vector3 turnVect = new Vector3(0.0f, rotTest, 0.0f);
+        Quaternion fishTurn = Quaternion.Euler(0, rotTest, 90.0f);
+        //rb.MoveRotation(fishTurn);
+        transform.rotation = fishTurn;
+
+        //rb.velocity = new Vector3((speedZ - (speedZ * (rotTest/90f))), 0f, speedZ - (speedZ * (90f/rotTest)));
+        //rb.velocity = new Vector3(0f, 0f, speedZ);
+        rb.velocity = transform.up * speedZ;
+
     }
 
     private void BobFunction()
@@ -111,6 +124,9 @@ public class MoveFish3D : MonoBehaviour
         {
             PlayerPrefs.SetInt(keyCheck, PlayerPrefs.GetInt(keyCheck) + 1);
         }
+
+        //Add too fish collection
+        collectionCount.AddFish(fishNum);
 
         //spawn bucket prefab
         bucket.GetComponent<BucketScript>().SpawnBucketFish(fishNum);

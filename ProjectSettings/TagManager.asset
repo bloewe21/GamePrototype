@@ -10,6 +10,9 @@ TagManager:
   - Surface
   - Trash
   - BucketItem
+  - Floor
+  - Side
+  - Water
   layers:
   - Default
   - TransparentFX

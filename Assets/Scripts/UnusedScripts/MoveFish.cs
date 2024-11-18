@@ -19,10 +19,12 @@ public class MoveFish : MonoBehaviour
     private GameObject canvas;
     private GameObject slider;
     private GameObject bucket;
+    public CollectionCount collectionCount;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collectionCount = FindObjectOfType<CollectionCount>();
 
         int speedMod = Random.Range(0, 2);
         if (speedMod == 0)
@@ -94,6 +96,10 @@ public class MoveFish : MonoBehaviour
         string fishName = transform.name;
         char c = fishName[4];
         int i = c - '0';
+
+        //Add too fish collection
+        collectionCount.AddFish(i);
+
         print(i);
         bucket.GetComponent<BucketScript>().SpawnBucketFish(i);
         //Destroy(gameObject);
